@@ -1,6 +1,7 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright © 2017-2018 microBean.
+ * Copyright © 2017-2023 microBean.
+ * Copyright © 2023      Xenogenics.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +15,7 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package org.microbean.kubernetes.controller;
+package fr.xenogenics.kubernetes.controller;
 
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.KubernetesResourceList;
@@ -26,8 +27,6 @@ import io.fabric8.kubernetes.client.dsl.Versionable;
 import io.fabric8.kubernetes.client.dsl.WatchAndWaitable;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
-import org.microbean.development.annotation.Issue;
-import org.microbean.development.annotation.NonBlocking;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -751,7 +750,6 @@ public class Reflector<T extends HasMetadata> implements Closeable {
    *
    * @see #close()
    */
-  @NonBlocking
   public final Future<?> start() throws IOException {
     final String cn = this.getClass().getName();
     final String mn = "start";
@@ -791,7 +789,6 @@ public class Reflector<T extends HasMetadata> implements Closeable {
                       cn, mn,
                       "Listing Kubernetes resources using {0}", this.operation);
         }
-        @Issue(id = "13", uri = "https://github.com/microbean/microbean-kubernetes-controller/issues/13")
         @SuppressWarnings("unchecked")
         final KubernetesResourceList<? extends T> list = ((Listable<? extends KubernetesResourceList<? extends T>>)this.operation).list();
         assert list != null;

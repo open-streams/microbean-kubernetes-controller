@@ -1,6 +1,7 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright © 2017-2018 microBean.
+ * Copyright © 2017-2023 microBean.
+ * Copyright © 2023      Xenogenics.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,18 +23,14 @@
  * @author <a href="https://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>
  *
- * @see org.microbean.kubernetes.controller.Controller
+ * @see fr.xenogenics.kubernetes.controller.Controller
  *
- * @see org.microbean.kubernetes.controller.EventCache
+ * @see fr.xenogenics.kubernetes.controller.EventCache
  *
- * @see org.microbean.kubernetes.controller.EventQueueCollection
+ * @see fr.xenogenics.kubernetes.controller.EventQueueCollection
  *
- * @see org.microbean.kubernetes.controller.EventQueue
+ * @see fr.xenogenics.kubernetes.controller.EventQueue
  *
- * @see org.microbean.kubernetes.controller.Reflector
+ * @see fr.xenogenics.kubernetes.controller.Reflector
  */
-@org.microbean.development.annotation.License(
-  name = "Apache License 2.0",
-  uri = "https://www.apache.org/licenses/LICENSE-2.0"
-)
-package org.microbean.kubernetes.controller;
+package fr.xenogenics.kubernetes.controller;

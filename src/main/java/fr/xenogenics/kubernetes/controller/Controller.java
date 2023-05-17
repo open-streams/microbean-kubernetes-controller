@@ -1,6 +1,7 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright © 2017-2018 microBean.
+ * Copyright © 2017-2023 microBean.
+ * Copyright © 2023      Xenogenics.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +15,7 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package org.microbean.kubernetes.controller;
+package fr.xenogenics.kubernetes.controller;
 
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.KubernetesResourceList;
@@ -24,8 +25,6 @@ import io.fabric8.kubernetes.client.dsl.Versionable;
 import io.fabric8.kubernetes.client.dsl.WatchAndWaitable;
 import net.jcip.annotations.Immutable;
 import net.jcip.annotations.ThreadSafe;
-import org.microbean.development.annotation.Blocking;
-import org.microbean.development.annotation.NonBlocking;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -460,7 +459,6 @@ public class Controller<T extends HasMetadata> implements Closeable {
    * @exception InterruptedException if the current {@link Thread} was
    * interrupted
    */
-  @Blocking
   public final void awaitEventCacheSynchronization() throws InterruptedException {
     this.synchronizationAwaiter.await();
   }
@@ -487,7 +485,6 @@ public class Controller<T extends HasMetadata> implements Closeable {
    *
    * @see EventQueueCollection.SynchronizationAwaitingPropertyChangeListener
    */
-  @Blocking
   public final boolean awaitEventCacheSynchronization(final long timeout, final TimeUnit timeUnit) throws InterruptedException {
     return this.synchronizationAwaiter.await(timeout, timeUnit);
   }
@@ -508,7 +505,6 @@ public class Controller<T extends HasMetadata> implements Closeable {
    *
    * @see Reflector#start()
    */
-  @NonBlocking
   public final void start() throws IOException {
     final String cn = this.getClass().getName();
     final String mn = "start";

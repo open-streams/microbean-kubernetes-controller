@@ -1,6 +1,7 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright © 2017-2018 microBean.
+ * Copyright © 2017-2023 microBean.
+ * Copyright © 2023      Xenogenics.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +15,7 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package org.microbean.kubernetes.controller;
+package fr.xenogenics.kubernetes.controller;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -33,7 +34,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -50,9 +50,6 @@ import io.fabric8.kubernetes.api.model.HasMetadata;
 
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
-
-import org.microbean.development.annotation.Blocking;
-import org.microbean.development.annotation.NonBlocking;
 
 /**
  * An {@link EventCache} that temporarily stores {@link Event}s in
@@ -778,7 +775,6 @@ public class EventQueueCollection<T extends HasMetadata> implements EventCache<T
    * @exception NullPointerException if {@code eventQueueConsumer} is
    * {@code null}
    */
-  @NonBlocking
   public final Future<?> start(final Consumer<? super EventQueue<? extends T>> eventQueueConsumer) {
     final String cn = this.getClass().getName();
     final String mn = "start";
@@ -931,7 +927,6 @@ public class EventQueueCollection<T extends HasMetadata> implements EventCache<T
         while (!Thread.currentThread().isInterrupted()) {
           // Note that get() *removes* an EventQueue from this
           // EventQueueCollection, blocking until one is available.
-          @Blocking          
           final EventQueue<T> eventQueue = this.get();
           if (eventQueue != null) {
             Throwable unhandledThrowable = null;
@@ -997,7 +992,6 @@ public class EventQueueCollection<T extends HasMetadata> implements EventCache<T
    *
    * @return an {@link EventQueue}, or {@code null}
    */
-  @Blocking
   @Override
   public final EventQueue<T> get() {
     final String cn = this.getClass().getName();
@@ -1046,7 +1040,6 @@ public class EventQueueCollection<T extends HasMetadata> implements EventCache<T
    * @exception InterruptedException if the {@link
    * Thread#currentThread() current thread} was interrupted
    */
-  @Blocking
   private final EventQueue<T> take() throws InterruptedException {
     final String cn = this.getClass().getName();
     final String mn = "take";
@@ -1837,7 +1830,6 @@ public class EventQueueCollection<T extends HasMetadata> implements EventCache<T
      * @exception InterruptedException if the current {@link Thread}
      * is interrupted
      */
-    @Blocking
     public final void await() throws InterruptedException {
       this.latch.await();
     }
@@ -1864,7 +1856,6 @@ public class EventQueueCollection<T extends HasMetadata> implements EventCache<T
      *
      * @see #propertyChange(PropertyChangeEvent)
      */
-    @Blocking
     public final boolean await(final long timeout, final TimeUnit timeUnit) throws InterruptedException {
       return this.latch.await(timeout, timeUnit);
     }

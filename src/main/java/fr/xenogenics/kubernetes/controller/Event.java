@@ -1,6 +1,7 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright © 2017-2018 microBean.
+ * Copyright © 2017-2023 microBean.
+ * Copyright © 2023      Xenogenics.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +15,7 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package org.microbean.kubernetes.controller;
+package fr.xenogenics.kubernetes.controller;
 
 import java.io.Serializable; // for javadoc only
 
@@ -23,8 +24,9 @@ import java.util.EventObject;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 
 /**
- * An {@link AbstractEvent} that describes an {@link EventCache}
- * synchronization event.
+ * An {@link AbstractEvent} that represents another event that has
+ * occurred to a Kubernetes resource, usually as found in an {@link
+ * EventCache} implementation.
  *
  * @param <T> a type of Kubernetes resource
  *
@@ -33,7 +35,7 @@ import io.fabric8.kubernetes.api.model.HasMetadata;
  *
  * @see EventCache
  */
-public class SynchronizationEvent<T extends HasMetadata> extends AbstractEvent<T> {
+public class Event<T extends HasMetadata> extends AbstractEvent<T> {
 
 
   /*
@@ -56,13 +58,12 @@ public class SynchronizationEvent<T extends HasMetadata> extends AbstractEvent<T
 
 
   /**
-   * Creates a new {@link SynchronizationEvent}.
+   * Creates a new {@link Event}.
    *
    * @param source the creator; must not be {@code null}
    *
-   * @param type the {@link Type} of this {@link
-   * SynchronizationEvent}; must not be {@code null}; must not be
-   * {@link Type#DELETION}
+   * @param type the {@link Type} of this {@link Event}; must not be
+   * {@code null}
    *
    * @param priorResource a {@link HasMetadata} representing the
    * <em>prior state</em> of the {@linkplain #getResource() Kubernetes
@@ -75,18 +76,12 @@ public class SynchronizationEvent<T extends HasMetadata> extends AbstractEvent<T
    * @exception NullPointerException if {@code source}, {@code type}
    * or {@code resource} is {@code null}
    *
-   * @exception IllegalArgumentException if {@link Type#DELETION} is
-   * equal to {@code type}
-   *
    * @see Type
    *
    * @see EventObject#getSource()
    */
-  public SynchronizationEvent(final Object source, final Type type, final T priorResource, final T resource) {
+  public Event(final Object source, final Type type, final T priorResource, final T resource) {
     super(source, type, priorResource, resource);
-    if (Type.DELETION.equals(type)) {
-      throw new IllegalArgumentException("DELETION.equals(type): " + type);
-    }
   }
 
 
@@ -96,22 +91,21 @@ public class SynchronizationEvent<T extends HasMetadata> extends AbstractEvent<T
 
 
   /**
-   * Returns {@code true} if the supplied {@link Object} is also a
-   * {@link SynchronizationEvent} and is equal in every respect to
-   * this one.
+   * Returns {@code true} if the supplied {@link Object} is also an
+   * {@link Event} and is equal in every respect to this one.
    *
    * @param other the {@link Object} to test; may be {@code null} in
    * which case {@code false} will be returned
    *
-   * @return {@code true} if the supplied {@link Object} is also a
-   * {@link SynchronizationEvent} and is equal in every respect to
-   * this one; {@code false} otherwise
+   * @return {@code true} if the supplied {@link Object} is also an
+   * {@link Event} and is equal in every respect to this one; {@code
+   * false} otherwise
    */
   @Override
   public boolean equals(final Object other) {
     if (other == this) {
       return true;
-    } else if (other instanceof SynchronizationEvent) {
+    } else if (other instanceof Event) {
 
       final boolean superEquals = super.equals(other);
       if (!superEquals) {
